@@ -1,57 +1,22 @@
-#include <iostream>
-#include <set>
-#include <TString.h>
-#include <TFile.h>
-#include <TTree.h>
+!/bin/bash
 
-void removeDuplicates(TString filename, TString outfilename) {
+#root -b -q removeDuplicates.C\(\"/raid/raid7/lucien/Higgs/DarkZ-NTuple/20181116/SkimTree_DarkPhoton_ZX_Run2016Data_m4l70/Data_Run2016-03Feb2017.root\"\)
+#root -b -q removeDuplicates.C\(\"/raid/raid7/lucien/Higgs/DarkZ-NTuple/20181116/SkimTree_DarkPhoton_ZX_Run2017Data_m4l70/Data_Run2017-17Nov2017.root\"\)
+#root -b -q removeDuplicates.C\(\"/raid/raid7/lucien/Higgs/HZZ4l/NTuple/ZPlusX/WrongFC/20181209/SkimTree_WrongFC_Run2016Data_v1/Data_Run2016-03Feb2017_4l.root\"\)
+#root -b -q removeDuplicates.C\(\"/raid/raid7/lucien/Higgs/HZZ4l/NTuple/ZPlusX/WrongFC/20181209/SkimTree_WrongFC_Run2017Data_v1/Data_Run2017-17Nov2017-v1.root\"\)
+#root -b -q removeDuplicates.C\(\"/raid/raid7/lucien/Higgs/HZZ4l/NTuple/ZPlusX/ZXCR/20181129_Run2018/Data_Run2018.root\"\)
+#root -b -q removeDuplicates.C\(\"/raid/raid7/lucien/Higgs/HZZ4l/NTuple/ZPlusX/ZXCR/20181212_Run2018_ZXCR-Z1LSkim/Data_Run2018.root\"\)
+#root -b -q removeDuplicates.C\(\"/raid/raid7/lucien/Higgs/HZZ4l/NTuple/ZPlusX/ZXCR/20181213_Run2017_ZXCR-Z1LSkim/Data_Run2017-17Nov2017.root\"\)
+#root -b -q removeDuplicates.C\(\"root://cmsio5.rc.ufl.edu//store/user/t2/users/klo/Higgs/HZZ4l/NTuple/Run2/Data_80XM17_FebCombined/Data_Run2016-03Feb2017.root\",\"/raid/raid7/lucien/Higgs/HZZ4l/NTuple/Run2/Data_80XM17_FebCombined/Data_Run2016-03Feb2017_noDuplicates.root\"\)
+#root -b -q removeDuplicates.C\(\"/raid/raid7/lucien/Higgs/HZZ4l/NTuple/ZPlusX/ZXCR/20190128_Run2017_ZXCR-Z1LSkim/Data_Run2017-17Nov2017.root\",\"/raid/raid7/lucien/Higgs/HZZ4l/NTuple/ZPlusX/ZXCR/20190128_Run2017_ZXCR-Z1LSkim/Data_Run2017-17Nov2017_noDuplicates.root\"\)
+#root -b -q removeDuplicates.C\(\"root://cmsio5.rc.ufl.edu//store/user/t2/users/klo/Higgs/HZZ4l/NTuple/Run2/Data_80XM17_FebCombined_v2/Data_Run2016-03Feb2017.root\",\"/raid/raid7/lucien/Higgs/HZZ4l/NTuple/Run2/Data_80XM17_FebCombined_v2/Data_Run2016-03Feb2017_noDuplicates.root\"\)
 
-    std::cout<<filename<<std::endl;
+#root -b -q removeDuplicates.C\(\"/raid/raid7/lucien/Higgs/HZZ4l/NTuple/ZPlusX/ZXCR/SkimTree_ZX_Run2018Data_190220/Data_Run2018A.root\",\"/raid/raid7/lucien/Higgs/HZZ4l/NTuple/ZPlusX/ZXCR/SkimTree_ZX_Run2018Data_190220/Data_Run2018A_noDuplicates.root\"\)
+#root -b -q removeDuplicates.C\(\"/raid/raid7/lucien/Higgs/HZZ4l/NTuple/ZPlusX/ZXCR/SkimTree_ZX_Run2018Data_190220/Data_Run2018B.root\",\"/raid/raid7/lucien/Higgs/HZZ4l/NTuple/ZPlusX/ZXCR/SkimTree_ZX_Run2018Data_190220/Data_Run2018B_noDuplicates.root\"\)
+#root -b -q removeDuplicates.C\(\"/raid/raid7/lucien/Higgs/HZZ4l/NTuple/ZPlusX/ZXCR/SkimTree_ZX_Run2018Data_190220/Data_Run2018C.root\",\"/raid/raid7/lucien/Higgs/HZZ4l/NTuple/ZPlusX/ZXCR/SkimTree_ZX_Run2018Data_190220/Data_Run2018C_noDuplicates.root\"\)
+#root -b -q removeDuplicates.C\(\"/raid/raid7/lucien/Higgs/HZZ4l/NTuple/ZPlusX/ZXCR/SkimTree_ZX_Run2018Data_190220/Data_Run2018D.root\",\"/raid/raid7/lucien/Higgs/HZZ4l/NTuple/ZPlusX/ZXCR/SkimTree_ZX_Run2018Data_190220/Data_Run2018D_noDuplicates.root\"\)
 
-    //TFile *oldfile = new TFile(filename);
-    TFile *oldfile = TFile::Open(filename);
-    //TTree *oldtree = (TTree*)oldfile->Get("Ana/passedEvents");
-    TTree *oldtree = (TTree*)oldfile->Get("passedEvents");
-
-    Long64_t nentries = oldtree->GetEntries();
-    std::cout<<nentries<<" total entries."<<std::endl;
-    ULong64_t Run, LumiSect, Event;
-    bool passedZ4lSelection;
-    oldtree->SetBranchAddress("Run",&Run);
-    oldtree->SetBranchAddress("LumiSect",&LumiSect);
-    oldtree->SetBranchAddress("Event",&Event);
-
-    //Create a new file + a clone of old tree in new file
-    TFile *newfile = new TFile(
-            //filename.ReplaceAll(".root","_noDuplicates.root")
-            outfilename
-            ,"recreate");
-    TTree *newtree = oldtree->CloneTree(0);
-
-    std::set<TString> runlumieventSet;
-    int nremoved = 0;
-    for (Long64_t i=0;i<nentries; i++) {
-        if (i%100000==0) std::cout<<i<<"/"<<nentries<<std::endl;
-        oldtree->GetEntry(i);
-
-        TString s_Run  = std::to_string(Run);
-        TString s_Lumi = std::to_string(LumiSect);
-        TString s_Event = std::to_string(Event);
-        TString runlumievent = s_Run+":"+s_Lumi+":"+s_Event;
-        
-        if (runlumieventSet.find(runlumievent)==runlumieventSet.end()) {
-            runlumieventSet.insert(runlumievent);
-            newtree->Fill();
-        } else {
-            nremoved++;
-        }
-        //if (passedZ4lSelection) newtree->Fill();
-    }
-
-    std::cout<<nremoved<<" duplicates."<<std::endl;
-    newtree->Print();
-    newtree->AutoSave();
-    //delete oldfile;
-    delete newfile;
-}
-
+root -b -q removeDuplicates.C\(\"root://cmsio5.rc.ufl.edu//store/user/t2/users/klo/Higgs/HZZ4l/NTuple/Run2/ZXData_Run2018/Data_Run2018A.root\",\"/raid/raid7/lucien/Higgs/HZZ4l/NTuple/ZPlusX/ZXCR/SkimTree_ZX_Run2018Data_190220/Data_Run2018A_UFHZZNTuple_noDuplicates.root\"\)
+root -b -q removeDuplicates.C\(\"root://cmsio5.rc.ufl.edu//store/user/t2/users/klo/Higgs/HZZ4l/NTuple/Run2/ZXData_Run2018/Data_Run2018B.root\",\"/raid/raid7/lucien/Higgs/HZZ4l/NTuple/ZPlusX/ZXCR/SkimTree_ZX_Run2018Data_190220/Data_Run2018B_UFHZZNTuple_noDuplicates.root\"\)
+root -b -q removeDuplicates.C\(\"root://cmsio5.rc.ufl.edu//store/user/t2/users/klo/Higgs/HZZ4l/NTuple/Run2/ZXData_Run2018/Data_Run2018C.root\",\"/raid/raid7/lucien/Higgs/HZZ4l/NTuple/ZPlusX/ZXCR/SkimTree_ZX_Run2018Data_190220/Data_Run2018C_UFHZZNTuple_noDuplicates.root\"\)
+root -b -q removeDuplicates.C\(\"root://cmsio5.rc.ufl.edu//store/user/t2/users/klo/Higgs/HZZ4l/NTuple/Run2/ZXData_Run2018/Data_Run2018D.root\",\"/raid/raid7/lucien/Higgs/HZZ4l/NTuple/ZPlusX/ZXCR/SkimTree_ZX_Run2018Data_190220/Data_Run2018D_UFHZZNTuple_noDuplicates.root\"\)
