@@ -26,6 +26,10 @@ float phiL3, deltaphiL23;
 float phiL4, deltaphiL24;
 float deltaphiZZ;
 int idL1, idL2, idL3, idL4, MomIdL1, MomIdL2, MomIdL3, MomIdL4, PDG_IdL1, PDG_IdL2, PDG_IdL3, PDG_IdL4, MomMomIdL1, MomMomIdL2, MomMomIdL3, MomMomIdL4;
+int nLeptons_id;
+int nLeptons_pt;
+int nLeptons_diff;
+int nLeptons_diff_pass;
 
 float mass4l, mass4lErr;
 float mass3l;
@@ -73,6 +77,7 @@ int nVtx, nInt; //nPV
 float me_qqZZ_MCFM;
 std::vector<float>* lep_mass;
 std::vector<float> *lep_pt; std::vector<float> *lep_eta; std::vector<float> *lep_phi;
+std::vector<float> *GENlep_pt;
 std::vector<float>* lepFSR_mass;
 std::vector<float> *lepFSR_pt; std::vector<float> *lepFSR_eta; std::vector<float> *lepFSR_phi;
 std::vector<int> *lep_Hindex_stdvec;
@@ -80,6 +85,8 @@ std::vector<int> *lep_Hindex_stdvec;
 std::vector<int> *lep_tightId;
 std::vector<int> *lep_ecalDriven;
 std::vector<int> *lep_id;
+std::vector<int> *GENlep_id;
+std::vector<int> *tau_id;
 std::vector<int> *lep_Sip;
 std::vector<float> *lep_dxy;
 std::vector<float> *lep_dz;
@@ -119,12 +126,15 @@ void setHZZTree(TTree* tree){
     tree->SetBranchStatus("triggersPassed",1);
     tree->SetBranchStatus("passedFiducialSelection",1);
     tree->SetBranchStatus("lep_id",1);
+    tree->SetBranchStatus("GENlep_id",1);
+    tree->SetBranchStatus("tau_id",1);
     tree->SetBranchStatus("lep_Sip",1);
     tree->SetBranchStatus("lep_dxy",1);
     tree->SetBranchStatus("lep_dz",1);
     tree->SetBranchStatus("lep_tightId",1);
     tree->SetBranchStatus("lep_ecalDriven",1);
     tree->SetBranchStatus("lep_pt",1);
+    tree->SetBranchStatus("GENlep_pt",1);
     tree->SetBranchStatus("lep_pterr",1);
     tree->SetBranchStatus("lep_eta",1);
     tree->SetBranchStatus("lep_phi",1);
@@ -167,10 +177,13 @@ void setHZZTree(TTree* tree){
     tree->SetBranchAddress("lep_ecalDriven", &lep_ecalDriven);
     tree->SetBranchAddress("passedFiducialSelection",&passedFiducialSelection);
     tree->SetBranchAddress("lep_id", &lep_id);
+    tree->SetBranchAddress("GENlep_id", &GENlep_id);
+    tree->SetBranchAddress("tau_id", &tau_id);
     tree->SetBranchAddress("lep_Sip",&lep_Sip);
     tree->SetBranchAddress("lep_dxy",&lep_dxy);  
     tree->SetBranchAddress("lep_dz",&lep_dz);
     tree->SetBranchAddress("lep_pt",&lep_pt);
+    tree->SetBranchAddress("GENlep_pt", &GENlep_pt);
     tree->SetBranchAddress("lep_pterr",&lep_pterr);
     tree->SetBranchAddress("lep_eta",&lep_eta);
     tree->SetBranchAddress("lep_phi",&lep_phi);
@@ -263,7 +276,10 @@ void initNewLiteTree(TTree* newtree){
     newtree->Branch("k_ggZZ",&k_ggZZ,"k_ggZZ/F");
     
     newtree->Branch("lep_id",&lep_id);
+    newtree->Branch("GENlep_id",&GENlep_id);
+    newtree->Branch("tau_id",&tau_id);
     newtree->Branch("lep_pt",&lep_pt);
+    newtree->Branch("GENlep_pt", &GENlep_pt);
     newtree->Branch("lep_eta",&lep_eta);
     newtree->Branch("lep_phi",&lep_phi);
     newtree->Branch("lep_mass",&lep_mass);
@@ -272,6 +288,10 @@ void initNewLiteTree(TTree* newtree){
     newtree->Branch("lep_RelIsoNoFSR",&lep_RelIsoNoFSR);
     newtree->Branch("lep_Hindex",&lep_Hindex_stdvec);
 
+    newtree->Branch("nLeptons_id",&nLeptons_id,"nLeptons_id/I");
+    newtree->Branch("nLeptons_pt",&nLeptons_pt,"nLeptons_pt/I");
+    newtree->Branch("nLeptons_diff",&nLeptons_diff,"nLeptons_diff/I");
+    newtree->Branch("nLeptons_diff_pass",&nLeptons_diff_pass,"nLeptons_diff_pass/I");
     newtree->Branch("pTL1",&pTL1,"pTL1/F");
     newtree->Branch("pTL2",&pTL2,"pTL2/F");
     newtree->Branch("pTL3",&pTL3,"pTL3/F");
@@ -339,7 +359,10 @@ void initNewLiteTree_fakerate(TTree* newtree){
     newtree->Branch("k_ggZZ",&k_ggZZ,"k_ggZZ/F");
     
     newtree->Branch("lep_id",&lep_id);
+    newtree->Branch("GENlep_id", &GENlep_id);
+    newtree->Branch("tau_id",&tau_id);
     newtree->Branch("lep_pt",&lep_pt);
+    newtree->Branch("GENlep_pt", &lep_pt);
     newtree->Branch("lep_eta",&lep_eta);
     newtree->Branch("lep_phi",&lep_phi);
     newtree->Branch("lep_mass",&lep_mass);
@@ -355,6 +378,10 @@ void initNewLiteTree_fakerate(TTree* newtree){
     newtree->Branch("lep_matchedR03_MomId",&lep_matchedR03_MomId);
     newtree->Branch("lep_matchedR03_MomMomId",&lep_matchedR03_MomMomId);
 
+    newtree->Branch("nLeptons_id",&nLeptons_id,"nLeptons_id/I");
+    newtree->Branch("nLeptons_pt",&nLeptons_pt,"nLeptons_pt/I");
+    newtree->Branch("nLeptons_diff",&nLeptons_diff,"nLeptons_diff/I");
+    newtree->Branch("nLeptons_diff_pass",&nLeptons_diff_pass,"nLeptons_diff_pass/I");
     newtree->Branch("pTL1",&pTL1,"pTL1/F");
     newtree->Branch("pTL2",&pTL2,"pTL2/F");
     newtree->Branch("pTL3",&pTL3,"pTL3/F");

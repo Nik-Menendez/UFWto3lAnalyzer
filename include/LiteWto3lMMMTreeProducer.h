@@ -45,7 +45,6 @@ class LiteWto3lMMMTreeProducer : public Analyzer
 
         TString treeName = "Ana/passedEvents";
         TString outTreeName = "passedEvents";
-        bool debug = false;
         bool do_wrong_fc = false;
 
 	double total_events=0;
@@ -54,6 +53,16 @@ class LiteWto3lMMMTreeProducer : public Analyzer
 	double cut3=0;
 	double cut4=0;
 	double cut5=0;
+
+        //=================== DEBUG ============================
+        bool debug=true;
+	double what=0;
+        double what1=0;
+        double what2=0;
+	double what3=0;
+	double what4=0;
+	double huh=0;
+        //=================== DEBUG ============================
 
         TString outFileName;
         TFile* outFile=0;
@@ -99,6 +108,7 @@ void LiteWto3lMMMTreeProducer::end(){
     double pass4 = pass3-cut4;
     double pass5 = pass4-cut5;
 
+    if(!debug){
     std::cout << std::endl;
     std::cout << "Efficiencies for each cut" << std::endl;
     std::cout << "=====================================================" << std::endl;
@@ -110,6 +120,17 @@ void LiteWto3lMMMTreeProducer::end(){
     if (pass4!=0) std::cout << "Pass muon pt cut: " << pass5 << ". Efficiency = " << (pass5/pass4)*100 << "%" << std::endl;
     std::cout << "=====================================================" << std::endl;
     if (total_events!=0) std::cout << "Total Efficiency = " << (pass5/total_events)*100 << "%" << std::endl; 
+    }
+
+    //=================== DEBUG ============================
+    std::cout << std::endl;
+    std::cout << (what/total_events)*100 << "% of events had different sized id and pt???" << std::endl;
+    std::cout << (what1/what)*100 << "% of the time id is bigger" << std::endl;
+    std::cout << (what2/what)*100 << "% of the time pt is bigger" << std::endl;
+    std::cout << (what3/what)*100 << "% of the time id and pt differ by 3" << std::endl;
+    std::cout << (what4/what)*100 << "% of the time id and pt differ by more than 3" << std::endl;
+    std::cout << (huh/total_events)*100 << "% of events have no leptons" << std::endl;
+    //=================== DEBUG ============================
 }
 
 LiteWto3lMMMTreeProducer::LiteWto3lMMMTreeProducer(
@@ -154,12 +175,41 @@ int LiteWto3lMMMTreeProducer::process(){
     total_events++;
 
     int Nlep = (*lep_id).size();
+    int Nlep_diff = (*lep_id).size() - (*lep_pt).size();
     int nTightLep = 0;
     int nLooseLep = 0;
     vector<int> tightIsoLepIndex;
     vector<int> looseIsoLepIndex;
 
-    if((*lep_id).size()<3 || (*lep_pt).size()<3){cut1++;return -1;}
+    //nLeptons = Nlep;
+
+    //=================== DEBUG ============================
+
+    if(((*lep_id).size() != (*lep_pt).size())){
+        what++;
+        if((*lep_id).size() > (*lep_pt).size()){what1++;}
+        else{what2++;}
+        if(((*lep_id).size() - (*lep_pt).size()) == 3){what3++;}
+        else if(((*lep_id).size() - (*lep_pt).size()) > 3){what4++;}
+        //std::cout << "lep_id.size() = " << (*lep_id).size() << ", lep_pt.size() = " << (*lep_pt).size() << ", difference = " << Nlep_diff << std::endl; 
+    }
+    nLeptons_id = (*lep_id).size();
+    nLeptons_pt = (*lep_pt).size();
+    nLeptons_diff = Nlep_diff;
+    if((*lep_id).size()==0){huh++;}
+
+    if((*lep_id).size()>=3){
+        nLeptons_diff_pass = (*lep_pt).size();
+    } else {
+        nLeptons_diff_pass = -1;
+    }
+
+    //=================== DEBUG ============================
+
+
+    if(!debug){
+    //if((*lep_id).size()<3 || (*lep_pt).size()<3){cut1++;return -1;}
+    if(Nlep<3){cut1++;return -1;}
 
     if(passedTrig == 0){cut2++;return -1;}
 
@@ -174,7 +224,7 @@ int LiteWto3lMMMTreeProducer::process(){
         }
     }
 
-    if (!(nTightLep == 2 && nLooseLep == 1)){cut3++;return -1;}
+    if (!(nTightLep >= 2 && nLooseLep >= 1)){cut3++;return -1;}
 
     int index1 = tightIsoLepIndex[0];
     int index2 = tightIsoLepIndex[1];
@@ -268,7 +318,8 @@ int LiteWto3lMMMTreeProducer::process(){
 
     massZ1 = Z.M();
     pT3l = Leps.Pt();
-            
+    }
+           
     //cout<<"fill tree"<<endl;
     //cout<<endl;
     outTree->Fill();   
