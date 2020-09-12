@@ -62,6 +62,7 @@ class LiteWto3lMMMTreeProducer : public Analyzer
 	double what3=0;
 	double what4=0;
 	double huh=0;
+	double L3isLoose=0;
         //=================== DEBUG ============================
 
         TString outFileName;
@@ -120,8 +121,8 @@ void LiteWto3lMMMTreeProducer::end(){
     if (pass4!=0) std::cout << "Pass muon pt cut: " << pass5 << ". Efficiency = " << (pass5/pass4)*100 << "%" << std::endl;
     std::cout << "=====================================================" << std::endl;
     if (total_events!=0) std::cout << "Total Efficiency = " << (pass5/total_events)*100 << "%" << std::endl; 
-    }
-
+    std::cout << "Percent of events where lep3 has Iso > 0.35: " << (L3isLoose/pass5)*100 << "%" << std::endl;
+    } else {
     //=================== DEBUG ============================
     std::cout << std::endl;
     std::cout << (what/total_events)*100 << "% of events had different sized id and pt???" << std::endl;
@@ -131,6 +132,7 @@ void LiteWto3lMMMTreeProducer::end(){
     std::cout << (what4/what)*100 << "% of the time id and pt differ by more than 3" << std::endl;
     std::cout << (huh/total_events)*100 << "% of events have no leptons" << std::endl;
     //=================== DEBUG ============================
+    }
 }
 
 LiteWto3lMMMTreeProducer::LiteWto3lMMMTreeProducer(
@@ -181,10 +183,11 @@ int LiteWto3lMMMTreeProducer::process(){
     vector<int> tightIsoLepIndex;
     vector<int> looseIsoLepIndex;
 
-    //nLeptons = Nlep;
+    nLeptons = Nlep;
 
     //=================== DEBUG ============================
 
+    if(debug){
     if(((*lep_id).size() != (*lep_pt).size())){
         what++;
         if((*lep_id).size() > (*lep_pt).size()){what1++;}
@@ -203,13 +206,14 @@ int LiteWto3lMMMTreeProducer::process(){
     } else {
         nLeptons_diff_pass = -1;
     }
+    }
 
     //=================== DEBUG ============================
 
 
     if(!debug){
-    //if((*lep_id).size()<3 || (*lep_pt).size()<3){cut1++;return -1;}
-    if(Nlep<3){cut1++;return -1;}
+    if((*lep_id).size()<3 || (*lep_pt).size()<3){cut1++;return -1;}
+    //if(Nlep<3){cut1++;return -1;}
 
     if(passedTrig == 0){cut2++;return -1;}
 
@@ -240,6 +244,9 @@ int LiteWto3lMMMTreeProducer::process(){
 
     double pTs[3]; sortedArray((*lep_pt)[index1], (*lep_pt)[index2], (*lep_pt)[index3], pTs);
     if (pTs[0] < leadingPtCut || pTs[1] < subleadingPtCut || pTs[2] < lowestPtCut){cut5++;return -1;}
+
+    if((*lep_RelIso)[index3]>0.35){L3isLoose++;}
+
 
     double isos[3]; sortedArray((*lep_RelIso)[index1], (*lep_RelIso)[index2], (*lep_RelIso)[index3], isos);
     //double sips[3]; sortedArray((*lep_Sip)[index1], (*lep_Sip)[index2], (*lep_Sip)[index3], sips);
@@ -291,17 +298,14 @@ int LiteWto3lMMMTreeProducer::process(){
     idL1 = (*lep_id)[index1]; pTL1 = Lep1.Pt(); etaL1 = Lep1.Eta();
     idL2 = (*lep_id)[index2]; pTL2 = Lep2.Pt(); etaL2 = Lep2.Eta();
     idL3 = (*lep_id)[index3]; pTL3 = Lep3.Pt(); etaL3 = Lep3.Eta();       
-    //idL4 = (*lep_id)[lep_Hindex[3]]; pTL4 = Lep4.Pt(); etaL4 = Lep4.Eta();
     phiL1 = Lep1.Phi();//deltaphiL13 = deltaPhi (Lep1.Phi(), Lep3.Phi()); 
     phiL2 = Lep2.Phi();//deltaphiL14 = deltaPhi (Lep1.Phi(), Lep4.Phi());
     phiL3 = Lep3.Phi();//deltaphiL23 = deltaPhi (Lep2.Phi(), Lep3.Phi());
-    //phiL4 = Lep4.Phi();//deltaphiL24 = deltaPhi (Lep2.Phi(), Lep4.Phi());
-    //deltaphiZZ = deltaPhi((Lep1+Lep2).Phi(), (Lep3+Lep4).Phi());
     vector<TLorentzVector> P4s; vector<int> tmpIDs;             
     P4s.push_back(Lep1); P4s.push_back(Lep2);
-    P4s.push_back(Lep3); //P4s.push_back(Lep4);
+    P4s.push_back(Lep3); 
     tmpIDs.push_back(idL1); tmpIDs.push_back(idL2);
-    tmpIDs.push_back(idL3); //tmpIDs.push_back(idL4);
+    tmpIDs.push_back(idL3); 
     IsoL1 = (*lep_RelIso)[index1]; IsoL2 = (*lep_RelIso)[index2];
     IsoL3 = (*lep_RelIso)[index3];
     massL1 = (*lep_mass)[index1]; massL2 = (*lep_mass)[index2];
