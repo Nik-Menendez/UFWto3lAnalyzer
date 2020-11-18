@@ -24,6 +24,7 @@ float phiL1, deltaphiL13;
 float phiL2, deltaphiL14;
 float phiL3, deltaphiL23;
 float phiL4, deltaphiL24;
+float dR12, dR13, dR23;
 float deltaphiZZ;
 int idL1, idL2, idL3, idL4, MomIdL1, MomIdL2, MomIdL3, MomIdL4, PDG_IdL1, PDG_IdL2, PDG_IdL3, PDG_IdL4, MomMomIdL1, MomMomIdL2, MomMomIdL3, MomMomIdL4;
 int nLeptons;
@@ -65,6 +66,7 @@ Float_t GENmassZ2;
 int EventCat;
 int nisoleptons, nbjets_pt30_eta4p7;
 float met, met_phi;
+float m3l, mt;
 
 // input tree variables
 std::string *triggersPassed;
@@ -279,6 +281,7 @@ void initNewLiteTree(TTree* newtree){
     newtree->Branch("lep_id",&lep_id);
     newtree->Branch("GENlep_id",&GENlep_id);
     newtree->Branch("tau_id",&tau_id);
+    newtree->Branch("lep_Sip",&lep_Sip);
     newtree->Branch("lep_pt",&lep_pt);
     newtree->Branch("GENlep_pt", &GENlep_pt);
     newtree->Branch("lep_eta",&lep_eta);
@@ -308,6 +311,11 @@ void initNewLiteTree(TTree* newtree){
     newtree->Branch("phiL3",&phiL3,"phiL3/F");
     newtree->Branch("deltaphiL13",&deltaphiL13,"deltaphiL13/F");
     newtree->Branch("deltaphiL23",&deltaphiL23,"deltaphiL23/F");
+    newtree->Branch("dR12",&dR12,"dR12/F");
+    newtree->Branch("dR13",&dR13,"dR13/F");
+    newtree->Branch("dR23",&dR23,"dR23/F");
+    newtree->Branch("m3l",&m3l,"m3l/F");
+    newtree->Branch("mt",&mt,"t/F");
 
     newtree->Branch("massZ1",&massZ1,"massZ1/F");
     newtree->Branch("massZ2",&massZ2,"massZ2/F"); 
@@ -351,6 +359,7 @@ void initNewLiteTree_fakerate(TTree* newtree){
     newtree->Branch("lep_id",&lep_id);
     newtree->Branch("GENlep_id", &GENlep_id);
     newtree->Branch("tau_id",&tau_id);
+    newtree->Branch("lep_Sip",&lep_Sip);
     newtree->Branch("lep_pt",&lep_pt);
     newtree->Branch("GENlep_pt", &lep_pt);
     newtree->Branch("lep_eta",&lep_eta);
@@ -403,6 +412,11 @@ void initNewLiteTree_fakerate(TTree* newtree){
     newtree->Branch("deltaphiL13",&deltaphiL13,"deltaphiL13/F");
     newtree->Branch("deltaphiL23",&deltaphiL23,"deltaphiL23/F");
     newtree->Branch("deltaphiZZ",&deltaphiZZ,"deltaphiZZ/F");
+    newtree->Branch("dR12",&dR12,"dR12/F");
+    newtree->Branch("dR13",&dR13,"dR13/F");
+    newtree->Branch("dR23",&dR23,"dR23/F");
+    newtree->Branch("m3l",&m3l,"m3l/F");
+    newtree->Branch("mt",&mt,"mt/F");
 
     newtree->Branch("mass2e2mu",&mass2e2mu,"mass2e2mu/F");
     newtree->Branch("pT3l",&pT3l,"pT3l/F");

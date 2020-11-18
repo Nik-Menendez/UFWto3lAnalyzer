@@ -45,8 +45,27 @@ class LiteWto3lMMMTreeProducer_Data : public Analyzer
 
         TString treeName = "Ana/passedEvents";
         TString outTreeName = "passedEvents";
-        bool debug = false;
+        //bool debug = false;
         bool do_wrong_fc = false;
+
+	double total_events=0;
+        double cut1=0;
+        double cut2=0;
+        double cut3=0;
+        double cut4=0;
+        double cut5=0;
+
+        //=================== DEBUG ============================
+        bool debug=false;
+        double what=0;
+        double what1=0;
+        double what2=0;
+        double what3=0;
+        double what4=0;
+        double huh=0;
+        double L3isLoose=0;
+        //=================== DEBUG ============================
+
 
         TString outFileName;
         TFile* outFile=0;
@@ -85,6 +104,38 @@ void LiteWto3lMMMTreeProducer_Data::end(){
     outFile->cd();
     outTree->Write(outTreeName,TObject::kOverwrite);
     outFile->Close(); 
+
+    double pass1 = total_events-cut1;
+    double pass2 = pass1-cut2;
+    double pass3 = pass2-cut3;
+    double pass4 = pass3-cut4;
+    double pass5 = pass4-cut5;
+
+    if(!debug){
+    std::cout << std::endl;
+    std::cout << "Efficiencies for each cut" << std::endl;
+    std::cout << "=====================================================" << std::endl;
+    std::cout << "Total events before cuts: " << total_events << std::endl;
+    if (total_events!=0) std::cout << "Pass 3 lepton cut: " << pass1 << ". Efficiency = " << (pass1/total_events)*100 << "%" << std::endl;
+    if (pass1!=0) std::cout << "Pass trigger: " << pass2 << ". Efficiency = " << (pass2/pass1)*100 << "%" << std::endl;
+    if (pass2!=0) std::cout << "Pass tight lepton cut: " << pass3 << ". Efficiency = " << (pass3/pass2)*100 << "%" << std::endl;
+    if (pass3!=0) std::cout << "Pass muons different charge cut: " << pass4 << ". Efficiency = " << (pass4/pass3)*100 << "%" << std::endl;
+    if (pass4!=0) std::cout << "Pass muon pt cut: " << pass5 << ". Efficiency = " << (pass5/pass4)*100 << "%" << std::endl;
+    std::cout << "=====================================================" << std::endl;
+    if (total_events!=0) std::cout << "Total Efficiency = " << (pass5/total_events)*100 << "%" << std::endl;
+    std::cout << "Percent of events where lep3 has Iso > 0.35: " << (L3isLoose/pass5)*100 << "%" << std::endl;
+    } else {
+    //=================== DEBUG ============================
+    std::cout << std::endl;
+    std::cout << (what/total_events)*100 << "% of events had different sized id and pt???" << std::endl;
+    std::cout << (what1/what)*100 << "% of the time id is bigger" << std::endl;
+    std::cout << (what2/what)*100 << "% of the time pt is bigger" << std::endl;
+    std::cout << (what3/what)*100 << "% of the time id and pt differ by 3" << std::endl;
+    std::cout << (what4/what)*100 << "% of the time id and pt differ by more than 3" << std::endl;
+    std::cout << (huh/total_events)*100 << "% of events have no leptons" << std::endl;
+    //=================== DEBUG ============================
+    }
+
 }
 
 LiteWto3lMMMTreeProducer_Data::LiteWto3lMMMTreeProducer_Data(
@@ -126,43 +177,71 @@ void LiteWto3lMMMTreeProducer_Data::sortedArray(double x, double y, double z, do
 
 int LiteWto3lMMMTreeProducer_Data::process(){
 
+    total_events++;
+
     int Nlep = (*lep_id).size();
+    int Nlep_diff = (*lep_id).size() - (*lep_pt).size();
     int nTightLep = 0;
     int nLooseLep = 0;
     vector<int> tightIsoLepIndex;
     vector<int> looseIsoLepIndex;
 
-    if((*lep_id).size()<3 || (*lep_pt).size()<3) return -1;
+    //=================== DEBUG ============================
 
-    if(passedTrig == 0) return -1; 
+    if(debug){
+    if(((*lep_id).size() != (*lep_pt).size())){
+        what++;
+        if((*lep_id).size() > (*lep_pt).size()){what1++;}
+        else{what2++;}
+        if(((*lep_id).size() - (*lep_pt).size()) == 3){what3++;}
+        else if(((*lep_id).size() - (*lep_pt).size()) > 3){what4++;}
+        //std::cout << "lep_id.size() = " << (*lep_id).size() << ", lep_pt.size() = " << (*lep_pt).size() << ", difference = " << Nlep_diff << std::endl; 
+    }
+    nLeptons_id = (*lep_id).size();
+    nLeptons_pt = (*lep_pt).size();
+    nLeptons_diff = Nlep_diff;
+    if((*lep_id).size()==0){huh++;}
+
+    if((*lep_id).size()>=3){
+        nLeptons_diff_pass = (*lep_pt).size();
+    } else {
+        nLeptons_diff_pass = -1;
+    }
+    }
+
+    //=================== DEBUG ============================
+
+    if((*lep_id).size()<3 || (*lep_pt).size()<3){cut1++; return -1;}
+
+    if(passedTrig == 0){cut2++; return -1;} 
 
     for (int iLep = 0; iLep < Nlep; iLep++) {
-        if ((*lep_tightId)[iLep] == 1 && (*lep_RelIso)[iLep] < 0.35 && abs((*lep_id)[iLep]) == 13 && nTightLep < 2){
+        if ((*lep_tightId)[iLep] == 1 && (*lep_RelIso)[iLep] < 0.35 && abs((*lep_id)[iLep]) == 13/* && nTightLep < 3*/){
             nTightLep++;
             tightIsoLepIndex.push_back(iLep);
         }
-        else if ((*lep_tightId)[iLep] == 1 && abs((*lep_id)[iLep]) == 13){
-            nLooseLep++;
-            looseIsoLepIndex.push_back(iLep);
-        }
+        //else if ((*lep_tightId)[iLep] == 1 && abs((*lep_id)[iLep]) == 13){
+        //    nLooseLep++;
+        //    looseIsoLepIndex.push_back(iLep);
+        //}
     }
 
-    if (!(nTightLep == 2 && nLooseLep == 1)) return -1;
+    if (!(nTightLep >= 3 /*&& nLooseLep == 1*/)){cut3++; return -1;}
 
     int index1 = tightIsoLepIndex[0];
     int index2 = tightIsoLepIndex[1];
-    int index3 = looseIsoLepIndex[0];
+    int index3 = tightIsoLepIndex[2];
 
     //if ( (*lep_id)[index1] + (*lep_id)[index2] != 0 ) return -1;
 
-    if ((*lep_id)[index1] > 0 && (*lep_id)[index2] > 0 && (*lep_id)[index3] > 0) return -1;
-    if ((*lep_id)[index1] < 0 && (*lep_id)[index2] < 0 && (*lep_id)[index3] < 0) return -1;
+    if ((*lep_id)[index1] > 0 && (*lep_id)[index2] > 0 && (*lep_id)[index3] > 0){cut4++; return -1;}
+    if ((*lep_id)[index1] < 0 && (*lep_id)[index2] < 0 && (*lep_id)[index3] < 0){cut4++; return -1;}
 
 
     //if ((*lep_Sip)[index1] > 3 || (*lep_Sip)[index2] > 3 || (*lep_Sip)[index3] > 3) return -1;
 
     double pTs[3]; sortedArray((*lep_pt)[index1], (*lep_pt)[index2], (*lep_pt)[index3], pTs);
-    if (pTs[0] < leadingPtCut || pTs[1] < subleadingPtCut || pTs[2] < lowestPtCut) return -1;
+    if (pTs[0] < leadingPtCut || pTs[1] < subleadingPtCut || pTs[2] < lowestPtCut){cut5++; return -1;}
 
     double isos[3]; sortedArray((*lep_RelIso)[index1], (*lep_RelIso)[index2], (*lep_RelIso)[index3], isos);
     //double sips[3]; sortedArray((*lep_Sip)[index1], (*lep_Sip)[index2], (*lep_Sip)[index3], sips);
@@ -208,38 +287,35 @@ int LiteWto3lMMMTreeProducer_Data::process(){
 
     dRs.push_back(tmpDr);
 
-    TLorentzVector Z = Lep1+Lep2;
-    //if (!(Z.M() > 86 && Z.M() < 96)) return kTRUE;
-
     idL1 = (*lep_id)[index1]; pTL1 = Lep1.Pt(); etaL1 = Lep1.Eta();
     idL2 = (*lep_id)[index2]; pTL2 = Lep2.Pt(); etaL2 = Lep2.Eta();
     idL3 = (*lep_id)[index3]; pTL3 = Lep3.Pt(); etaL3 = Lep3.Eta();       
-    //idL4 = (*lep_id)[lep_Hindex[3]]; pTL4 = Lep4.Pt(); etaL4 = Lep4.Eta();
     phiL1 = Lep1.Phi();//deltaphiL13 = deltaPhi (Lep1.Phi(), Lep3.Phi()); 
     phiL2 = Lep2.Phi();//deltaphiL14 = deltaPhi (Lep1.Phi(), Lep4.Phi());
     phiL3 = Lep3.Phi();//deltaphiL23 = deltaPhi (Lep2.Phi(), Lep3.Phi());
-    //phiL4 = Lep4.Phi();//deltaphiL24 = deltaPhi (Lep2.Phi(), Lep4.Phi());
-    //deltaphiZZ = deltaPhi((Lep1+Lep2).Phi(), (Lep3+Lep4).Phi());
     vector<TLorentzVector> P4s; vector<int> tmpIDs;             
     P4s.push_back(Lep1); P4s.push_back(Lep2);
-    P4s.push_back(Lep3); //P4s.push_back(Lep4);
+    P4s.push_back(Lep3);
     tmpIDs.push_back(idL1); tmpIDs.push_back(idL2);
-    tmpIDs.push_back(idL3); //tmpIDs.push_back(idL4);
+    tmpIDs.push_back(idL3);
     IsoL1 = (*lep_RelIso)[index1]; IsoL2 = (*lep_RelIso)[index2];
     IsoL3 = (*lep_RelIso)[index3];
-    massL1 = (*lep_mass)[index1]; massL1 = (*lep_mass)[index2];
+    massL1 = (*lep_mass)[index1]; massL2 = (*lep_mass)[index2];
     massL3 = (*lep_mass)[index3];
+	//MomIdL1 = (*lep_matchedR03_MomId)[index1];  MomIdL2 = (*lep_matchedR03_MomId)[index2];  MomIdL3 = (*lep_matchedR03_MomId)[index3];
+    //PDG_IdL1 = (*lep_matchedR03_PdgId)[index1];  PDG_IdL2 = (*lep_matchedR03_PdgId)[index2];  PDG_IdL3 = (*lep_matchedR03_PdgId)[index3];
+    //MomMomIdL1 = (*lep_matchedR03_MomMomId)[index1];  MomMomIdL2 = (*lep_matchedR03_MomMomId)[index2];  MomMomIdL3 = (*lep_matchedR03_MomMomId)[index3];
+    dR12 = deltaR(Lep1.Eta(),Lep1.Phi(),Lep2.Eta(),Lep2.Phi()); dR13 = deltaR(Lep1.Eta(),Lep1.Phi(),Lep3.Eta(),Lep3.Phi()); dR23 = deltaR(Lep2.Eta(),Lep2.Phi(),Lep3.Eta(),Lep3.Phi());
 
-    //lep_Hindex_stdvec->push_back(lep_Hindex[0]);
-    //lep_Hindex_stdvec->push_back(lep_Hindex[1]);
-    //lep_Hindex_stdvec->push_back(lep_Hindex[2]);
-    //lep_Hindex_stdvec->push_back(lep_Hindex[3]);
+	TLorentzVector threeleps = Lep1+Lep2+Lep3;
+    m3l = threeleps.M();
 
-    //TLorentzVector threeleps = Lep1+Lep2+Lep3;
+    TLorentzVector Met;
+    Met.SetPtEtaPhiM(met,0,met_phi,0);
+    mt = (threeleps + Met).M();
 
-    massZ1 = Z.M();
     pT3l = Leps.Pt();
-            
+ 
     //cout<<"fill tree"<<endl;
     //cout<<endl;
     outTree->Fill();   

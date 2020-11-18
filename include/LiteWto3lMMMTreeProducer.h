@@ -218,21 +218,21 @@ int LiteWto3lMMMTreeProducer::process(){
     if(passedTrig == 0){cut2++;return -1;}
 
     for (int iLep = 0; iLep < Nlep; iLep++) {
-        if ((*lep_tightId)[iLep] == 1 && (*lep_RelIso)[iLep] < 0.35 && abs((*lep_id)[iLep]) == 13 && nTightLep < 2){
+        if ((*lep_tightId)[iLep] == 1 && (*lep_RelIso)[iLep] < 0.35 && abs((*lep_id)[iLep]) == 13/* && nTightLep < 3*/){
             nTightLep++;
             tightIsoLepIndex.push_back(iLep);
         }
-        else if ((*lep_tightId)[iLep] == 1 && abs((*lep_id)[iLep]) == 13){
-            nLooseLep++;
-            looseIsoLepIndex.push_back(iLep);
-        }
+        //else if ((*lep_tightId)[iLep] == 1 && abs((*lep_id)[iLep]) == 13){
+        //    nLooseLep++;
+        //    looseIsoLepIndex.push_back(iLep);
+        //}
     }
 
-    if (!(nTightLep >= 2 && nLooseLep >= 1)){cut3++;return -1;}
+    if (!(nTightLep >= 3/* && nLooseLep >= 1*/)){cut3++;return -1;}
 
     int index1 = tightIsoLepIndex[0];
     int index2 = tightIsoLepIndex[1];
-    int index3 = looseIsoLepIndex[0];
+    int index3 = tightIsoLepIndex[2];
 
     //if ( (*lep_id)[index1] + (*lep_id)[index2] != 0 ) return -1;
 
@@ -313,15 +313,18 @@ int LiteWto3lMMMTreeProducer::process(){
     MomIdL1 = (*lep_matchedR03_MomId)[index1];  MomIdL2 = (*lep_matchedR03_MomId)[index2];  MomIdL3 = (*lep_matchedR03_MomId)[index3];
     PDG_IdL1 = (*lep_matchedR03_PdgId)[index1];  PDG_IdL2 = (*lep_matchedR03_PdgId)[index2];  PDG_IdL3 = (*lep_matchedR03_PdgId)[index3];
     MomMomIdL1 = (*lep_matchedR03_MomMomId)[index1];  MomMomIdL2 = (*lep_matchedR03_MomMomId)[index2];  MomMomIdL3 = (*lep_matchedR03_MomMomId)[index3];
-    //lep_Hindex_stdvec->push_back(lep_Hindex[0]);
-    //lep_Hindex_stdvec->push_back(lep_Hindex[1]);
-    //lep_Hindex_stdvec->push_back(lep_Hindex[2]);
-    //lep_Hindex_stdvec->push_back(lep_Hindex[3]);
+    dR12 = deltaR(Lep1.Eta(),Lep1.Phi(),Lep2.Eta(),Lep2.Phi()); dR13 = deltaR(Lep1.Eta(),Lep1.Phi(),Lep3.Eta(),Lep3.Phi()); dR23 = deltaR(Lep2.Eta(),Lep2.Phi(),Lep3.Eta(),Lep3.Phi());
 
-    //TLorentzVector threeleps = Lep1+Lep2+Lep3;
+    TLorentzVector threeleps = Lep1+Lep2+Lep3;
+    m3l = threeleps.M();
+
+    TLorentzVector Met;
+    Met.SetPtEtaPhiM(met,0,met_phi,0);
+    mt = (threeleps + Met).M();
 
     massZ1 = Z.M();
     pT3l = Leps.Pt();
+
     }
            
     //cout<<"fill tree"<<endl;
