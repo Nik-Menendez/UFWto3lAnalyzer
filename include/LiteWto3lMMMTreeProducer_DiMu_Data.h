@@ -1,7 +1,7 @@
-#ifndef LiteWto3lMMMTreeProducer_Data_h
-#define LiteWto3lMMMTreeProducer_Data_h
+#ifndef LiteWto3lMMMTreeProducer_DiMu_Data_h
+#define LiteWto3lMMMTreeProducer_DiMu_Data_h
 
-#include "LiteWto3lMMMTreeProducer_Data_Linkdef.h"
+#include "LiteWto3lMMMTreeProducer_DiMu_Data_Linkdef.h"
 #include "Analyzer.h"
 #include "HZZTree_fakerate.h"
 #include "deltaR.h"
@@ -9,22 +9,22 @@
 
 using namespace std;  
 
-class LiteWto3lMMMTreeProducer_Data : public Analyzer 
+class LiteWto3lMMMTreeProducer_DiMu_Data : public Analyzer 
 {
     public:
         // static const double Zmass = 91.1876;
         const double Zmass = 91.1876;
 
-        LiteWto3lMMMTreeProducer_Data();
-        ~LiteWto3lMMMTreeProducer_Data();
-        LiteWto3lMMMTreeProducer_Data(
+        LiteWto3lMMMTreeProducer_DiMu_Data();
+        ~LiteWto3lMMMTreeProducer_DiMu_Data();
+        LiteWto3lMMMTreeProducer_DiMu_Data(
                 double isoCutEl_in,
                 double isoCutMu_in,
                 TString outputDir_in,
                 TString outFileName_in,
                 bool do_wrong_fc_in=false
                 );
-         LiteWto3lMMMTreeProducer_Data(
+         LiteWto3lMMMTreeProducer_DiMu_Data(
                 TString outputDir_in,
                 TString outFileName_in
                 );
@@ -72,35 +72,35 @@ class LiteWto3lMMMTreeProducer_Data : public Analyzer
         TTree* outTree=0;
 };
 
-LiteWto3lMMMTreeProducer_Data::LiteWto3lMMMTreeProducer_Data(){
+LiteWto3lMMMTreeProducer_DiMu_Data::LiteWto3lMMMTreeProducer_DiMu_Data(){
 
 }
 
-LiteWto3lMMMTreeProducer_Data::~LiteWto3lMMMTreeProducer_Data(){
+LiteWto3lMMMTreeProducer_DiMu_Data::~LiteWto3lMMMTreeProducer_DiMu_Data(){
 
 }
 
-bool LiteWto3lMMMTreeProducer_Data::passSelection(){
+bool LiteWto3lMMMTreeProducer_DiMu_Data::passSelection(){
     return true;
 }
 
 
-void LiteWto3lMMMTreeProducer_Data::initTree(){
+void LiteWto3lMMMTreeProducer_DiMu_Data::initTree(){
     setHZZTree(tree);
 }
 
-void LiteWto3lMMMTreeProducer_Data::setDebugMode(bool debug_in){
+void LiteWto3lMMMTreeProducer_DiMu_Data::setDebugMode(bool debug_in){
     debug = debug_in;
 }
 
-void LiteWto3lMMMTreeProducer_Data::setup(){
+void LiteWto3lMMMTreeProducer_DiMu_Data::setup(){
     outFile = TFile::Open(outputDir+outFileName,fOptionWrite);
     outTree = new TTree(outTreeName,outTreeName);
 
     initNewLiteTree_fakerate(outTree);
 }
 
-void LiteWto3lMMMTreeProducer_Data::end(){
+void LiteWto3lMMMTreeProducer_DiMu_Data::end(){
     outFile->cd();
     outTree->Write(outTreeName,TObject::kOverwrite);
     outFile->Close(); 
@@ -138,7 +138,7 @@ void LiteWto3lMMMTreeProducer_Data::end(){
 
 }
 
-LiteWto3lMMMTreeProducer_Data::LiteWto3lMMMTreeProducer_Data(
+LiteWto3lMMMTreeProducer_DiMu_Data::LiteWto3lMMMTreeProducer_DiMu_Data(
                 double isoCutEl_in,
                 double isoCutMu_in,
                 TString outputDir_in,
@@ -152,7 +152,7 @@ LiteWto3lMMMTreeProducer_Data::LiteWto3lMMMTreeProducer_Data(
     do_wrong_fc = do_wrong_fc_in;
 }
 
-LiteWto3lMMMTreeProducer_Data::LiteWto3lMMMTreeProducer_Data(
+LiteWto3lMMMTreeProducer_DiMu_Data::LiteWto3lMMMTreeProducer_DiMu_Data(
                 TString outputDir_in,
                 TString outFileName_in
                 ){
@@ -160,7 +160,7 @@ LiteWto3lMMMTreeProducer_Data::LiteWto3lMMMTreeProducer_Data(
     outFileName = outFileName_in;
 }
 
-void LiteWto3lMMMTreeProducer_Data::sortedArray(double x, double y, double z, double sortarray[3])
+void LiteWto3lMMMTreeProducer_DiMu_Data::sortedArray(double x, double y, double z, double sortarray[3])
 {
     double max_v = max(x,max(y,z));
     double min_v = min(x,min(y,z));
@@ -175,7 +175,7 @@ void LiteWto3lMMMTreeProducer_Data::sortedArray(double x, double y, double z, do
     //return sortarray;
 }
 
-int LiteWto3lMMMTreeProducer_Data::process(){
+int LiteWto3lMMMTreeProducer_DiMu_Data::process(){
 
     total_events++;
 
@@ -211,7 +211,7 @@ int LiteWto3lMMMTreeProducer_Data::process(){
 
     //=================== DEBUG ============================
 
-    if((*lep_id).size()<3 || (*lep_pt).size()<3){cut1++; return -1;}
+    if((*lep_id).size()<2 || (*lep_pt).size()<2){cut1++; return -1;}
 
     if(passedTrig == 0){cut2++; return -1;} 
 
@@ -226,29 +226,40 @@ int LiteWto3lMMMTreeProducer_Data::process(){
         //}
     }
 
-    if (!(nTightLep >= 3 /*&& nLooseLep == 1*/)){cut3++; return -1;}
+    if (!(nTightLep >= 2 /*&& nLooseLep == 1*/)){cut3++; return -1;}
 
     int index1 = tightIsoLepIndex[0];
     int index2 = tightIsoLepIndex[1];
-    int index3 = tightIsoLepIndex[2];
+	//int index3 = 0;
+    //if (nTightLep >= 3){int index3 = tightIsoLepIndex[2];}
 
     //if ( (*lep_id)[index1] + (*lep_id)[index2] != 0 ) return -1;
 
-    if ((*lep_id)[index1] > 0 && (*lep_id)[index2] > 0 && (*lep_id)[index3] > 0){cut4++; return -1;}
-    if ((*lep_id)[index1] < 0 && (*lep_id)[index2] < 0 && (*lep_id)[index3] < 0){cut4++; return -1;}
+	//if (nTightLep >= 3){
+    //	if ((*lep_id)[index1] > 0 && (*lep_id)[index2] > 0 && (*lep_id)[index3] > 0){cut4++; return -1;}
+    //	if ((*lep_id)[index1] < 0 && (*lep_id)[index2] < 0 && (*lep_id)[index3] < 0){cut4++; return -1;}
+	//} else {
+		if ((*lep_id)[index1] > 0 && (*lep_id)[index2] > 0){cut4++; return -1;}
+		if ((*lep_id)[index1] < 0 && (*lep_id)[index2] < 0){cut4++; return -1;}
+	//}
 
+	//if (nTightLep >= 3) {
+    //    if ((*lep_id)[index1] > 0 && (*lep_id)[index2] > 0){index2 = index3;}
+    //    if ((*lep_id)[index1] < 0 && (*lep_id)[index2] < 0){index2 = index3;}
+    //}
 
     //if ((*lep_Sip)[index1] > 3 || (*lep_Sip)[index2] > 3 || (*lep_Sip)[index3] > 3) return -1;
 
-    double pTs[3]; sortedArray((*lep_pt)[index1], (*lep_pt)[index2], (*lep_pt)[index3], pTs);
-    if (pTs[0] < leadingPtCut || pTs[1] < subleadingPtCut || pTs[2] < lowestPtCut){cut5++; return -1;}
+    //double pTs[3]; sortedArray((*lep_pt)[index1], (*lep_pt)[index2], (*lep_pt)[index3], pTs);
+    //if (pTs[0] < leadingPtCut || pTs[1] < subleadingPtCut || pTs[2] < lowestPtCut){cut5++; return -1;}
+	if ((*lep_pt)[index1] < leadingPtCut || (*lep_pt)[index2] < subleadingPtCut){cut5++; return -1;}
 
-    double isos[3]; sortedArray((*lep_RelIso)[index1], (*lep_RelIso)[index2], (*lep_RelIso)[index3], isos);
+    //double isos[3]; sortedArray((*lep_RelIso)[index1], (*lep_RelIso)[index2], (*lep_RelIso)[index3], isos);
     //double sips[3]; sortedArray((*lep_Sip)[index1], (*lep_Sip)[index2], (*lep_Sip)[index3], sips);
 
     int tmp = 0;
     TLorentzVector Lep1,Lep2,Lep3;
-    Lep3.SetPtEtaPhiM((*lep_pt)[index3],(*lep_eta)[index3],(*lep_phi)[index3],(*lep_mass)[index3]);
+    //Lep3.SetPtEtaPhiM((*lep_pt)[index3],(*lep_eta)[index3],(*lep_phi)[index3],(*lep_mass)[index3]);
     if ((*lep_pt)[index1] >= (*lep_pt)[index2]){
         Lep1.SetPtEtaPhiM((*lep_pt)[index1],(*lep_eta)[index1],(*lep_phi)[index1],(*lep_mass)[index1]); 
         Lep2.SetPtEtaPhiM((*lep_pt)[index2],(*lep_eta)[index2],(*lep_phi)[index2],(*lep_mass)[index2]);
@@ -273,24 +284,24 @@ int LiteWto3lMMMTreeProducer_Data::process(){
 
     } else {tmpDr = deltaR(Lep1.Eta(),Lep1.Phi(),Lep2.Eta(),Lep2.Phi());}
 
-    if ((*lep_id)[index1] != (*lep_id)[index3]) {
-        mlls.push_back(Lep1 + Lep3);
-        dRs.push_back(deltaR(Lep1.Eta(),Lep1.Phi(),Lep3.Eta(),Lep3.Phi()));
+    //if ((*lep_id)[index1] != (*lep_id)[index3]) {
+    //    mlls.push_back(Lep1 + Lep3);
+    //    dRs.push_back(deltaR(Lep1.Eta(),Lep1.Phi(),Lep3.Eta(),Lep3.Phi()));
   
-    } else {tmpDr = deltaR(Lep1.Eta(),Lep1.Phi(),Lep3.Eta(),Lep3.Phi());}
+    //} else {tmpDr = deltaR(Lep1.Eta(),Lep1.Phi(),Lep3.Eta(),Lep3.Phi());}
 
-    if ((*lep_id)[index2] != (*lep_id)[index3]) {
-        mlls.push_back(Lep2 + Lep3);
-        dRs.push_back(deltaR(Lep2.Eta(),Lep2.Phi(),Lep3.Eta(),Lep3.Phi()));
+    //if ((*lep_id)[index2] != (*lep_id)[index3]) {
+    //    mlls.push_back(Lep2 + Lep3);
+    //    dRs.push_back(deltaR(Lep2.Eta(),Lep2.Phi(),Lep3.Eta(),Lep3.Phi()));
 
-    } else {tmpDr = deltaR(Lep2.Eta(),Lep2.Phi(),Lep3.Eta(),Lep3.Phi());}
+    //} else {tmpDr = deltaR(Lep2.Eta(),Lep2.Phi(),Lep3.Eta(),Lep3.Phi());}
 
     dRs.push_back(tmpDr);
 
 	nLeptons = Nlep;
     idL1 = (*lep_id)[index1]; pTL1 = Lep1.Pt(); etaL1 = Lep1.Eta();
     idL2 = (*lep_id)[index2]; pTL2 = Lep2.Pt(); etaL2 = Lep2.Eta();
-    idL3 = (*lep_id)[index3]; pTL3 = Lep3.Pt(); etaL3 = Lep3.Eta();       
+    //idL3 = (*lep_id)[index3]; pTL3 = Lep3.Pt(); etaL3 = Lep3.Eta();       
     phiL1 = Lep1.Phi();//deltaphiL13 = deltaPhi (Lep1.Phi(), Lep3.Phi()); 
     phiL2 = Lep2.Phi();//deltaphiL14 = deltaPhi (Lep1.Phi(), Lep4.Phi());
     phiL3 = Lep3.Phi();//deltaphiL23 = deltaPhi (Lep2.Phi(), Lep3.Phi());
@@ -300,9 +311,9 @@ int LiteWto3lMMMTreeProducer_Data::process(){
     tmpIDs.push_back(idL1); tmpIDs.push_back(idL2);
     tmpIDs.push_back(idL3);
     IsoL1 = (*lep_RelIso)[index1]; IsoL2 = (*lep_RelIso)[index2];
-    IsoL3 = (*lep_RelIso)[index3];
+    //IsoL3 = (*lep_RelIso)[index3];
     massL1 = (*lep_mass)[index1]; massL2 = (*lep_mass)[index2];
-    massL3 = (*lep_mass)[index3];
+    //massL3 = (*lep_mass)[index3];
 	//MomIdL1 = (*lep_matchedR03_MomId)[index1];  MomIdL2 = (*lep_matchedR03_MomId)[index2];  MomIdL3 = (*lep_matchedR03_MomId)[index3];
     //PDG_IdL1 = (*lep_matchedR03_PdgId)[index1];  PDG_IdL2 = (*lep_matchedR03_PdgId)[index2];  PDG_IdL3 = (*lep_matchedR03_PdgId)[index3];
     //MomMomIdL1 = (*lep_matchedR03_MomMomId)[index1];  MomMomIdL2 = (*lep_matchedR03_MomMomId)[index2];  MomMomIdL3 = (*lep_matchedR03_MomMomId)[index3];

@@ -15,7 +15,7 @@ inputTreeName           = "Ana/passedEvents"
 
 #outputDir 		= t2_prefix+"/store/user/t2/users/nikmenendez/skimmed/2017/new/"
 #outputDir		= t2_prefix+"/store/user/t2/users/nikmenendez/skimmed/signal/new/"
-outputDir 		= t2_prefix+"/store/user/t2/users/nikmenendez/skimmed/test/"
+outputDir 		= t2_prefix+"/store/user/t2/users/nikmenendez/skimmed/Di_Muon/"
 #outputDir		= t2_prefix+"/store/user/t2/users/nikmenendez/skimmed/data2017/"
 
 fileNames = [
@@ -33,9 +33,9 @@ fileNames = [
 		#bkgTreeDirT2_2016+"TTJets_Dilept_TuneCUETP8M2T4_13TeV-amcatnloFXFX-pythia8.root",
 		#bkgTreeDirT2_2016+"WZTo3LNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root",
         bkgTreeDirT2_2017+"DYJetsToLL_M-10to50_TuneCP5_13TeV-madgraphMLM-pythia8.root",
-        #bkgTreeDirT2_2017+"DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8.root",
-        #bkgTreeDirT2_2017+"TTJets_DiLept_TuneCP5_13TeV-madgraphMLM-pythia8.root",
-        #bkgTreeDirT2_2017+"WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8.root",
+        bkgTreeDirT2_2017+"DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8.root",
+        bkgTreeDirT2_2017+"TTJets_DiLept_TuneCP5_13TeV-madgraphMLM-pythia8.root",
+        bkgTreeDirT2_2017+"WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8.root",
         #bkgTreeDirT2_2018+"DYJetsToLL_M-10to50_TuneCP5_13TeV-madgraphMLM-pythia8.root",
         #bkgTreeDirT2_2018+"DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8.root",
         #bkgTreeDirT2_2018+"TTJets_DiLept_TuneCP5_13TeV-madgraphMLM-pythia8.root",
@@ -56,11 +56,11 @@ fileNames = [
         ]
 
 # ____________________________________________________________________________________________________________________________________ ||
-ROOT.gSystem.Load("include/LiteWto3lMMMTreeProducer_h.so")
+ROOT.gSystem.Load("include/LiteWto3lMMMTreeProducer_DiMu_h.so")
 
 makedirs(outputDir)
 for fileName in fileNames:
-    ana = ROOT.LiteWto3lMMMTreeProducer(
+    ana = ROOT.LiteWto3lMMMTreeProducer_DiMu(
             0.35,
             0.35,
             outputDir,

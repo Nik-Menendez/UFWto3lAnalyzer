@@ -14,7 +14,7 @@ if year==2016:
 if year==2017: 
 	inputDir       = t2_prefix+"/store/user/t2/users/klo/Higgs/DarkZ/NTuples/ZPlusX_Early2017_v1/"			#2017
 	#outputDir      = t2_prefix+"/store/user/t2/users/nikmenendez/skimmed/data2017/new/"
-	outputDir	   = t2_prefix+"/store/user/t2/users/nikmenendez/skimmed/no_cuts/" 
+	outputDir	   = t2_prefix+"/store/user/t2/users/nikmenendez/skimmed/Di_Muon/" 
 if year==2018: 
 	inputDir       = t2_prefix+"/store/user/t2/users/klo/Higgs/HZZ4l/NTuple/Run2/Data2018_102X_M19_3l_2018jets/"	#2018
 	outputDir      = t2_prefix+"/store/user/t2/users/nikmenendez/skimmed/data2018/new/"
@@ -52,11 +52,11 @@ elif year==2018:
 	    ]
 
 # ____________________________________________________________________________________________________________________________________ ||
-ROOT.gSystem.Load("include/LiteWto3lMMMTreeProducer_Data_h.so")
+ROOT.gSystem.Load("include/LiteWto3lMMMTreeProducer_DiMu_Data_h.so")
 
 makedirs(outputDir)
 for fileName in fileNames:
-    ana = ROOT.LiteWto3lMMMTreeProducer_Data(
+    ana = ROOT.LiteWto3lMMMTreeProducer_DiMu_Data(
             0.35,
             0.35,
             outputDir,
