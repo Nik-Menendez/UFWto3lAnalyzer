@@ -13,9 +13,9 @@ datTreeDirT2_2018	= t2_prefix+"/store/user/t2/users/klo/Higgs/HZZ4l/NTuple/Run2/
 datTreeDirT2_2017	= t2_prefix+"/store/user/t2/users/klo/Higgs/DarkZ/NTuples/ZPlusX_Early2017_v1/"
 inputTreeName           = "Ana/passedEvents"
 
-#outputDir 		= t2_prefix+"/store/user/t2/users/nikmenendez/skimmed/2017/new/"
-#outputDir		= t2_prefix+"/store/user/t2/users/nikmenendez/skimmed/signal/new/"
-outputDir 		= t2_prefix+"/store/user/t2/users/nikmenendez/skimmed/test/"
+outputDir 		= t2_prefix+"/store/user/t2/users/nikmenendez/skimmed/2017/new3/"
+#outputDir		= t2_prefix+"/store/user/t2/users/nikmenendez/skimmed/signal/new3/"
+#outputDir 		= t2_prefix+"/store/user/t2/users/nikmenendez/skimmed/test/"
 #outputDir		= t2_prefix+"/store/user/t2/users/nikmenendez/skimmed/data2017/"
 
 fileNames = [
@@ -29,17 +29,19 @@ fileNames = [
         #sigTreeDirT2+"WpTo3l_ZpM30.root",
         #sigTreeDirT2+"WpTo3l_ZpM45.root",
         #sigTreeDirT2+"WpTo3l_ZpM60.root",
+
         #bkgTreeDirT2_2016+"DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root",
 		#bkgTreeDirT2_2016+"TTJets_Dilept_TuneCUETP8M2T4_13TeV-amcatnloFXFX-pythia8.root",
 		#bkgTreeDirT2_2016+"WZTo3LNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root",
         bkgTreeDirT2_2017+"DYJetsToLL_M-10to50_TuneCP5_13TeV-madgraphMLM-pythia8.root",
-        #bkgTreeDirT2_2017+"DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8.root",
-        #bkgTreeDirT2_2017+"TTJets_DiLept_TuneCP5_13TeV-madgraphMLM-pythia8.root",
-        #bkgTreeDirT2_2017+"WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8.root",
+        bkgTreeDirT2_2017+"DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8.root",
+        bkgTreeDirT2_2017+"TTJets_DiLept_TuneCP5_13TeV-madgraphMLM-pythia8.root",
+        bkgTreeDirT2_2017+"WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8.root",
         #bkgTreeDirT2_2018+"DYJetsToLL_M-10to50_TuneCP5_13TeV-madgraphMLM-pythia8.root",
         #bkgTreeDirT2_2018+"DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8.root",
         #bkgTreeDirT2_2018+"TTJets_DiLept_TuneCP5_13TeV-madgraphMLM-pythia8.root",
         #bkgTreeDirT2_2018+"WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8.root",
+
 		#datTreeDirT2_2017+'SingleElectron_Run2017-17Nov2017.root',
     	#datTreeDirT2_2017+'SingleMuon_Run2017-17Nov2017.root',
     	#datTreeDirT2_2017+'DoubleMuon_Run2017-17Nov2017.root',
@@ -49,6 +51,7 @@ fileNames = [
     	#datTreeDirT2_2018+'Data_Run2018B-17Sep2018_noDuplicates.root',
     	#datTreeDirT2_2018+'Data_Run2018C-17Sep2018_noDuplicates.root',
     	#datTreeDirT2_2018+'Data_Run2018D-PromptReco-v2_noDuplicates.root',
+
 		#bkgTreeDirT2_test+'DYJetsToLL_M10To50.root',	
 		#bkgTreeDirT2_test+'DYJetsToLL_M50.root',
 		#bkgTreeDirT2_test+'TTJets.root',

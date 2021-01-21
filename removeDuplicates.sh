@@ -21,4 +21,5 @@
 #root -b -q removeDuplicates.C\(\"root://cmsio5.rc.ufl.edu//store/user/t2/users/klo/Higgs/HZZ4l/NTuple/Run2/ZXData_Run2018/Data_Run2018C.root\",\"/raid/raid7/lucien/Higgs/HZZ4l/NTuple/ZPlusX/ZXCR/SkimTree_ZX_Run2018Data_190220/Data_Run2018C_UFHZZNTuple_noDuplicates.root\"\)
 #root -b -q removeDuplicates.C\(\"root://cmsio5.rc.ufl.edu//store/user/t2/users/klo/Higgs/HZZ4l/NTuple/Run2/ZXData_Run2018/Data_Run2018D.root\",\"/raid/raid7/lucien/Higgs/HZZ4l/NTuple/ZPlusX/ZXCR/SkimTree_ZX_Run2018Data_190220/Data_Run2018D_UFHZZNTuple_noDuplicates.root\"\)
 
-root -l removeDuplicates.C\(\"/cmsuf/data/store/user/t2/users/nikmenendez/skimmed/Di_Muon/total_data.root\",\"/cmsuf/data/store/user/t2/users/nikmenendez/skimmed/Di_Muon/total_data_no_dupes.root\"\)
+hadd -f /cmsuf/data/store/user/t2/users/nikmenendez/skimmed/data2017/new3/total_data.root /cmsuf/data/store/user/t2/users/nikmenendez/skimmed/data2017/new3/*2017.root
+root -l removeDuplicates.C\(\"/cmsuf/data/store/user/t2/users/nikmenendez/skimmed/data2017/new3/total_data.root\",\"/cmsuf/data/store/user/t2/users/nikmenendez/skimmed/data2017/new3/total_data_no_dupe.root\"\)

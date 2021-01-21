@@ -26,7 +26,7 @@ float phiL3, deltaphiL23;
 float phiL4, deltaphiL24;
 float dR12, dR13, dR23;
 float deltaphiZZ;
-int idL1, idL2, idL3, idL4, MomIdL1, MomIdL2, MomIdL3, MomIdL4, PDG_IdL1, PDG_IdL2, PDG_IdL3, PDG_IdL4, MomMomIdL1, MomMomIdL2, MomMomIdL3, MomMomIdL4;
+int idL1, idL2, idL3, idL4, tightIdL1, tightIdL2, tightIdL3, MomIdL1, MomIdL2, MomIdL3, MomIdL4, PDG_IdL1, PDG_IdL2, PDG_IdL3, PDG_IdL4, MomMomIdL1, MomMomIdL2, MomMomIdL3, MomMomIdL4;
 int nLeptons;
 int nLeptons_id;
 int nLeptons_pt;
@@ -264,6 +264,7 @@ void initNewLiteTree(TTree* newtree){
     newtree->Branch("nVtx",&nVtx,"nVtx/I");
     newtree->Branch("passedTrig",&passedTrig,"passedTrig/O");
     newtree->Branch("passedFullSelection",&passedFullSelection,"passedFullSelection/O");
+	newtree->Branch("passedZ1LSelection",&passedZ1LSelection,"passedZ1LSelection/O");
     newtree->Branch("passedZ4lSelection",&passedZ4lSelection,"passedZ4lSelection/O");
     newtree->Branch("passedZXCRSelection",&passedZXCRSelection,"passedZXCRSelection/O");
     newtree->Branch("passSmartCut",&passSmartCut,"passSmartCut/O");
@@ -309,6 +310,9 @@ void initNewLiteTree(TTree* newtree){
     newtree->Branch("phiL1",&phiL1,"phiL1/F");
     newtree->Branch("phiL2",&phiL2,"phiL2/F");
     newtree->Branch("phiL3",&phiL3,"phiL3/F");
+	newtree->Branch("tightIdL1",&tightIdL1,"tightIdL1/I");
+	newtree->Branch("tightIdL2",&tightIdL2,"tightIdL2/I");
+	newtree->Branch("tightIdL3",&tightIdL3,"tightIdL3/I");
     newtree->Branch("deltaphiL13",&deltaphiL13,"deltaphiL13/F");
     newtree->Branch("deltaphiL23",&deltaphiL23,"deltaphiL23/F");
     newtree->Branch("dR12",&dR12,"dR12/F");
@@ -342,6 +346,7 @@ void initNewLiteTree_fakerate(TTree* newtree){
     newtree->Branch("nVtx",&nVtx,"nVtx/I");
     newtree->Branch("passedTrig",&passedTrig,"passedTrig/O");
     newtree->Branch("passedFullSelection",&passedFullSelection,"passedFullSelection/O");
+	newtree->Branch("passedZ1LSelection",&passedZ1LSelection,"passedZ1LSelection/O");
     newtree->Branch("passedZ4lSelection",&passedZ4lSelection,"passedZ4lSelection/O");
     newtree->Branch("passedZXCRSelection",&passedZXCRSelection,"passedZXCRSelection/O");
     newtree->Branch("passSmartCut",&passSmartCut,"passSmartCut/O");
@@ -397,6 +402,9 @@ void initNewLiteTree_fakerate(TTree* newtree){
     newtree->Branch("IsoL1",&IsoL1,"IsoL1/F");
     newtree->Branch("IsoL2",&IsoL2,"IsoL2/F");
     newtree->Branch("IsoL3",&IsoL3,"IsoL3/F");
+	newtree->Branch("tightIdL1",&tightIdL1,"tightIdL1/I");
+	newtree->Branch("tightIdL2",&tightIdL2,"tightIdL2/I");
+	newtree->Branch("tightIdL3",&tightIdL3,"tightIdL3/I");
     newtree->Branch("massL1",&massL1,"massL1/F");
     newtree->Branch("massL2",&massL2,"massL2/F");
     newtree->Branch("massL3",&massL3,"massL3/F");
