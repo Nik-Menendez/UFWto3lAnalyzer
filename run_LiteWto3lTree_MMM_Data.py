@@ -13,13 +13,13 @@ if year==2016:
 	outputDir      = t2_prefix+"/store/user/t2/users/nikmenendez/skimmed/data2016/new/"
 if year==2017: 
 	inputDir       = t2_prefix+"/store/user/t2/users/klo/Higgs/DarkZ/NTuples/ZPlusX_Early2017_v1/"			#2017
-	outputDir      = t2_prefix+"/store/user/t2/users/nikmenendez/skimmed/data2017/new3/"
+	outputDir      = t2_prefix+"/store/user/t2/users/nikmenendez/skimmed/data2017/new_dimu/"
 	#outputDir	   = t2_prefix+"/store/user/t2/users/nikmenendez/skimmed/no_cuts/" 
 if year==2018: 
 	inputDir       = t2_prefix+"/store/user/t2/users/klo/Higgs/HZZ4l/NTuple/Run2/Data2018_102X_M19_3l_2018jets/"	#2018
 	outputDir      = t2_prefix+"/store/user/t2/users/nikmenendez/skimmed/data2018/new/"
 if year==2000:
-	inputDir	   = t2_prefix+"/store/user/t2/users/klo/Higgs/DarkZ/NTuples/ZPlusX_Early2017_v1/"
+	inputDir	   = t2_prefix+"/store/user/t2/users/klo/Higgs/HZZ4l/NTuple/Run2/Data2018_102X_M19_3l_2018jets/"
 	outputDir	   = t2_prefix+"/store/user/t2/users/nikmenendez/skimmed/test/"
 	fileNames = ["skimZ1L_Data_Run2017-17Nov2017_noDuplicates.root"]
 

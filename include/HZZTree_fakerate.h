@@ -27,11 +27,10 @@ float phiL4, deltaphiL24;
 float dR12, dR13, dR23;
 float deltaphiZZ;
 int idL1, idL2, idL3, idL4, tightIdL1, tightIdL2, tightIdL3, MomIdL1, MomIdL2, MomIdL3, MomIdL4, PDG_IdL1, PDG_IdL2, PDG_IdL3, PDG_IdL4, MomMomIdL1, MomMomIdL2, MomMomIdL3, MomMomIdL4;
+bool trueL3;
 int nLeptons;
-int nLeptons_id;
-int nLeptons_pt;
-int nLeptons_diff;
-int nLeptons_diff_pass;
+int nMuons;
+int nElectrons;
 
 float mass4l, mass4lErr;
 float mass3l;
@@ -294,10 +293,8 @@ void initNewLiteTree(TTree* newtree){
     newtree->Branch("lep_Hindex",&lep_Hindex_stdvec);
 
     newtree->Branch("nLeptons",&nLeptons,"nLeptons/I");
-    newtree->Branch("nLeptons_id",&nLeptons_id,"nLeptons_id/I");
-    newtree->Branch("nLeptons_pt",&nLeptons_pt,"nLeptons_pt/I");
-    newtree->Branch("nLeptons_diff",&nLeptons_diff,"nLeptons_diff/I");
-    newtree->Branch("nLeptons_diff_pass",&nLeptons_diff_pass,"nLeptons_diff_pass/I");
+	newtree->Branch("nMuons",&nMuons,"nMuons/I");
+	newtree->Branch("nElectrons",&nElectrons,"nElectrons/I");
     newtree->Branch("pTL1",&pTL1,"pTL1/F");
     newtree->Branch("pTL2",&pTL2,"pTL2/F");
     newtree->Branch("pTL3",&pTL3,"pTL3/F");
@@ -318,6 +315,7 @@ void initNewLiteTree(TTree* newtree){
     newtree->Branch("dR12",&dR12,"dR12/F");
     newtree->Branch("dR13",&dR13,"dR13/F");
     newtree->Branch("dR23",&dR23,"dR23/F");
+	newtree->Branch("trueL3",&trueL3,"trueL3/O");
     newtree->Branch("m3l",&m3l,"m3l/F");
     newtree->Branch("mt",&mt,"t/F");
 
@@ -383,10 +381,8 @@ void initNewLiteTree_fakerate(TTree* newtree){
     newtree->Branch("lep_matchedR03_MomMomId",&lep_matchedR03_MomMomId);
 
     newtree->Branch("nLeptons",&nLeptons,"nLeptons/I");
-    newtree->Branch("nLeptons_id",&nLeptons_id,"nLeptons_id/I");
-    newtree->Branch("nLeptons_pt",&nLeptons_pt,"nLeptons_pt/I");
-    newtree->Branch("nLeptons_diff",&nLeptons_diff,"nLeptons_diff/I");
-    newtree->Branch("nLeptons_diff_pass",&nLeptons_diff_pass,"nLeptons_diff_pass/I");
+	newtree->Branch("nMuons",&nMuons,"nMuons/I");
+    newtree->Branch("nElectrons",&nElectrons,"nElectrons/I");
     newtree->Branch("pTL1",&pTL1,"pTL1/F");
     newtree->Branch("pTL2",&pTL2,"pTL2/F");
     newtree->Branch("pTL3",&pTL3,"pTL3/F");
@@ -423,6 +419,7 @@ void initNewLiteTree_fakerate(TTree* newtree){
     newtree->Branch("dR12",&dR12,"dR12/F");
     newtree->Branch("dR13",&dR13,"dR13/F");
     newtree->Branch("dR23",&dR23,"dR23/F");
+	newtree->Branch("trueL3",&trueL3,"trueL3/O");
     newtree->Branch("m3l",&m3l,"m3l/F");
     newtree->Branch("mt",&mt,"mt/F");
 

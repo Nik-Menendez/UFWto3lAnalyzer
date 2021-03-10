@@ -186,7 +186,63 @@ int LiteWto3lMMMTreeProducer_Data::process(){
     vector<int> tightIsoLepIndex;
     vector<int> looseIsoLepIndex;
 
+	nLeptons = Nlep;
+    nMuons = 0;
+    nElectrons = 0;
+
+    for(unsigned int i=0; i<Nlep; i++){
+        if (abs((*lep_id)[i]) == 11) {
+            nElectrons++;
+        } else if (abs((*lep_id)[i]) == 13) {
+            nMuons++;
+        }
+    }
+
+//	//************************************
+//
+//	if((*lep_id).size()<3 || (*lep_pt).size()<3){cut1++;return -1;}
+//    //if(Nlep<3){cut1++;return -1;}
+//
+//    if(passedTrig == 0){cut2++;return -1;}
+//
+//    for (int iLep = 0; iLep < Nlep; iLep++) {
+//        if ((*lep_tightId)[iLep] == 1 && (*lep_RelIso)[iLep] < 0.35 && abs((*lep_id)[iLep]) == 13/* && nTightLep < 3*/){
+//            nTightLep++;
+//            tightIsoLepIndex.push_back(iLep);
+//        }
+//        //else if ((*lep_tightId)[iLep] == 1 && abs((*lep_id)[iLep]) == 13){
+//        //    nLooseLep++;
+//        //    looseIsoLepIndex.push_back(iLep);
+//        //}
+//    }
+//
+//    if (!(nTightLep >= 3/* && nLooseLep >= 1*/)){cut3++;return -1;}
+//
+//    int index1 = tightIsoLepIndex[0];
+//    int index2 = tightIsoLepIndex[1];
+//    int index3 = tightIsoLepIndex[2];
+//
+//    //if ( (*lep_id)[index1] + (*lep_id)[index2] != 0 ) return -1;
+//
+//    if ((*lep_id)[index1] > 0 && (*lep_id)[index2] > 0 && (*lep_id)[index3] > 0){cut4++;return -1;}
+//    if ((*lep_id)[index1] < 0 && (*lep_id)[index2] < 0 && (*lep_id)[index3] < 0){cut4++;return -1;}
+//
+//
+//    //if ((*lep_Sip)[index1] > 3 || (*lep_Sip)[index2] > 3 || (*lep_Sip)[index3] > 3) return -1;
+//
+//    double pTs[3]; sortedArray((*lep_pt)[index1], (*lep_pt)[index2], (*lep_pt)[index3], pTs);
+//    if (pTs[0] < leadingPtCut || pTs[1] < subleadingPtCut || pTs[2] < lowestPtCut){cut5++;return -1;}
+//
+//    if((*lep_RelIso)[index3]>0.35){L3isLoose++;}
+//
+//
+//    double isos[3]; sortedArray((*lep_RelIso)[index1], (*lep_RelIso)[index2], (*lep_RelIso)[index3], isos);
+//    //double sips[3]; sortedArray((*lep_Sip)[index1], (*lep_Sip)[index2], (*lep_Sip)[index3], sips);
+//
+//	//*************************************
+
 	int index1=0; int index2=0; int index3=0;
+	trueL3=false;
     bool foundZ1LCandidate=false;
 
     //*******************************************
@@ -196,7 +252,7 @@ int LiteWto3lMMMTreeProducer_Data::process(){
     double mZ1High = 200.0;//120.0;
 	bool onlymu = false;
 
-    if ( Nlep<3 ) {cut1++; return -1;}
+    //if ( Nlep<3 ) {cut1++; return -1;}
 
     int n_Zs=0;
     vector<int> Z_Z1L_lepindex1;
@@ -256,10 +312,10 @@ int LiteWto3lMMMTreeProducer_Data::process(){
 			if(abs((*lep_id)[j1])!=13) continue;
 		}
 
-        TLorentzVector lep_i1, lep_i2, lep_j1;
+        TLorentzVector lep_i1, lep_i2;//, lep_j1;
         lep_i1.SetPtEtaPhiM((*lep_pt)[i1],(*lep_eta)[i1],(*lep_phi)[i1],(*lep_mass)[i1]);
         lep_i2.SetPtEtaPhiM((*lep_pt)[i2],(*lep_eta)[i2],(*lep_phi)[i2],(*lep_mass)[i2]);
-        lep_j1.SetPtEtaPhiM((*lep_pt)[j1],(*lep_eta)[j1],(*lep_phi)[j1],(*lep_mass)[j1]);
+        //lep_j1.SetPtEtaPhiM((*lep_pt)[j1],(*lep_eta)[j1],(*lep_phi)[j1],(*lep_mass)[j1]);
 
         TLorentzVector Zi;
         Zi = lep_i1+lep_i2;
@@ -281,23 +337,23 @@ int LiteWto3lMMMTreeProducer_Data::process(){
         // Check dR(li,lj)>0.02 for any i,j
         vector<double> alldR;
         alldR.push_back(deltaR(lep_i1.Eta(),lep_i1.Phi(),lep_i2.Eta(),lep_i2.Phi()));
-        alldR.push_back(deltaR(lep_i1.Eta(),lep_i1.Phi(),lep_j1.Eta(),lep_j1.Phi()));
-        alldR.push_back(deltaR(lep_i2.Eta(),lep_i2.Phi(),lep_j1.Eta(),lep_j1.Phi()));
+        //alldR.push_back(deltaR(lep_i1.Eta(),lep_i1.Phi(),lep_j1.Eta(),lep_j1.Phi()));
+        //alldR.push_back(deltaR(lep_i2.Eta(),lep_i2.Phi(),lep_j1.Eta(),lep_j1.Phi()));
         if (debug) cout<<" minDr: "<<*min_element(alldR.begin(),alldR.end())<<endl;
-        if (*min_element(alldR.begin(),alldR.end())<0.02) continue;
+        if (*min_element(alldR.begin(),alldR.end())<0.4) continue;
 
 		// Check M(l+,l-)>4.0 GeV for any OS pair
         // Do not include FSR photons
         vector<double> allM;
         TLorentzVector i1i2;
         i1i2 = (lep_i1)+(lep_i2); allM.push_back(i1i2.M());
-        if ((*lep_id)[i1]*(*lep_id)[j1]<0) {
-            TLorentzVector i1j1;
-            i1j1 = (lep_i1)+(lep_j1); allM.push_back(i1j1.M());
-        } else {
-            TLorentzVector i2j1;
-            i2j1 = (lep_i2)+(lep_j1); allM.push_back(i2j1.M());
-        }
+        //if ((*lep_id)[i1]*(*lep_id)[j1]<0) {
+        //    TLorentzVector i1j1;
+        //    i1j1 = (lep_i1)+(lep_j1); allM.push_back(i1j1.M());
+        //} else {
+        //    TLorentzVector i2j1;
+        //    i2j1 = (lep_i2)+(lep_j1); allM.push_back(i2j1.M());
+        //}
         if (debug) cout<<" min m(l+l-): "<<*min_element(allM.begin(),allM.end())<<endl;
         if (*min_element(allM.begin(),allM.end())<4.0) {continue;}
 
@@ -316,17 +372,26 @@ int LiteWto3lMMMTreeProducer_Data::process(){
 
         if ( Z1DeltaM<=minZ1DeltaM ) {
 
+			for(unsigned int lep=0; lep<Nlep; lep++){
+                if (lep==Z1_lepindex[0] || lep==Z1_lepindex[1]) continue;
+                if (abs((*lep_id)[lep])==13){
+                    index3 = lep;
+                    trueL3 = true;
+                    break;
+                }
+            }
+
             minZ1DeltaM = Z1DeltaM;
 
             TLorentzVector Z1L;
-            Z1L = Z1+lep_j1;
+            //Z1L = Z1+lep_j1;
 
             massZ1_Z1L = Z1.M();
             mass3l = Z1L.M();
 
             index1 = Z1_lepindex[0];
             index2 = Z1_lepindex[1];
-            index3 = j1;
+            //index3 = j1;
 
             if (debug) cout<<" new best Z1L candidate: massZ1: "<<massZ1<<" (mass3l: "<<mass3l<<")"<<endl;
             foundZ1LCandidate=true;
@@ -355,7 +420,6 @@ int LiteWto3lMMMTreeProducer_Data::process(){
 
     TLorentzVector Leps = Lep1+Lep2+Lep3;
     double LepsPhi = Leps.Phi(); double LepsPt = Leps.Pt();
-    //double mT = sqrt(2*(met)*LepsPt*(1-cos(deltaPhi(LepsPhi, met_phi) ) ) );
 
     vector<double> dRs; double tmpDr = -1;
     vector<TLorentzVector> mlls;
@@ -365,17 +429,17 @@ int LiteWto3lMMMTreeProducer_Data::process(){
 
     } else {tmpDr = deltaR(Lep1.Eta(),Lep1.Phi(),Lep2.Eta(),Lep2.Phi());}
 
-    if ((*lep_id)[index1] != (*lep_id)[index3]) {
-        mlls.push_back(Lep1 + Lep3);
-        dRs.push_back(deltaR(Lep1.Eta(),Lep1.Phi(),Lep3.Eta(),Lep3.Phi()));
+    //if ((*lep_id)[index1] != (*lep_id)[index3]) {
+    //    mlls.push_back(Lep1 + Lep3);
+    //    dRs.push_back(deltaR(Lep1.Eta(),Lep1.Phi(),Lep3.Eta(),Lep3.Phi()));
   
-    } else {tmpDr = deltaR(Lep1.Eta(),Lep1.Phi(),Lep3.Eta(),Lep3.Phi());}
+    //} else {tmpDr = deltaR(Lep1.Eta(),Lep1.Phi(),Lep3.Eta(),Lep3.Phi());}
 
-    if ((*lep_id)[index2] != (*lep_id)[index3]) {
-        mlls.push_back(Lep2 + Lep3);
-        dRs.push_back(deltaR(Lep2.Eta(),Lep2.Phi(),Lep3.Eta(),Lep3.Phi()));
+    //if ((*lep_id)[index2] != (*lep_id)[index3]) {
+    //    mlls.push_back(Lep2 + Lep3);
+    //    dRs.push_back(deltaR(Lep2.Eta(),Lep2.Phi(),Lep3.Eta(),Lep3.Phi()));
 
-    } else {tmpDr = deltaR(Lep2.Eta(),Lep2.Phi(),Lep3.Eta(),Lep3.Phi());}
+    //} else {tmpDr = deltaR(Lep2.Eta(),Lep2.Phi(),Lep3.Eta(),Lep3.Phi());}
 
     dRs.push_back(tmpDr);
 
@@ -393,12 +457,10 @@ int LiteWto3lMMMTreeProducer_Data::process(){
     tmpIDs.push_back(idL3);
     IsoL1 = (*lep_RelIso)[index1]; IsoL2 = (*lep_RelIso)[index2];
     IsoL3 = (*lep_RelIso)[index3];
-	tightIdL1 = (*lep_tightId)[index1]; tightIdL2 = (*lep_tightId)[index2]; tightIdL3 = (*lep_tightId)[index3];
+	tightIdL1 = (*lep_tightId)[index1]; tightIdL2 = (*lep_tightId)[index2]; 
+	tightIdL3 = (*lep_tightId)[index3];
     massL1 = (*lep_mass)[index1]; massL2 = (*lep_mass)[index2];
     massL3 = (*lep_mass)[index3];
-	//MomIdL1 = (*lep_matchedR03_MomId)[index1];  MomIdL2 = (*lep_matchedR03_MomId)[index2];  MomIdL3 = (*lep_matchedR03_MomId)[index3];
-    //PDG_IdL1 = (*lep_matchedR03_PdgId)[index1];  PDG_IdL2 = (*lep_matchedR03_PdgId)[index2];  PDG_IdL3 = (*lep_matchedR03_PdgId)[index3];
-    //MomMomIdL1 = (*lep_matchedR03_MomMomId)[index1];  MomMomIdL2 = (*lep_matchedR03_MomMomId)[index2];  MomMomIdL3 = (*lep_matchedR03_MomMomId)[index3];
     dR12 = deltaR(Lep1.Eta(),Lep1.Phi(),Lep2.Eta(),Lep2.Phi()); dR13 = deltaR(Lep1.Eta(),Lep1.Phi(),Lep3.Eta(),Lep3.Phi()); dR23 = deltaR(Lep2.Eta(),Lep2.Phi(),Lep3.Eta(),Lep3.Phi());
 
 	TLorentzVector threeleps = Lep1+Lep2+Lep3;

@@ -4,18 +4,18 @@ from PyUtils.Shell import makedirs
 
 # ____________________________________________________________________________________________________________________________________ ||
 t2_prefix		= "/cmsuf/data"
-bkgTreeDirT2_2016	= t2_prefix+"/store/user/t2/users/klo/Higgs/HZZ4l/NTuple/Run2/MC80X_M17_2l_Feb21/"
-bkgTreeDirT2_2017	= t2_prefix+"/store/user/t2/users/nikmenendez/2017_MC_bkg/"
-bkgTreeDirT2_2018   = t2_prefix+"/store/user/t2/users/nikmenendez/2018_MC_bkg/"  
-bkgTreeDirT2_test	= t2_prefix+"/store/user/t2/users/klo/Higgs/DarkZ/NTuples/ZPlusX_Early2017_v1/"
-sigTreeDirT2        = t2_prefix+"/store/user/t2/users/kshi/files_ihepa/Zprime/Zp_data_Ntuple/"
-datTreeDirT2_2018	= t2_prefix+"/store/user/t2/users/klo/Higgs/HZZ4l/NTuple/Run2/Data2018_102X_M19_3l_2018jets/"
-datTreeDirT2_2017	= t2_prefix+"/store/user/t2/users/klo/Higgs/DarkZ/NTuples/ZPlusX_Early2017_v1/"
+bkgTreeDirT2_2016	= "/cmsuf/data/store/user/t2/users/klo/Higgs/HZZ4l/NTuple/Run2/MC80X_M17_2l_Feb21/"
+bkgTreeDirT2_2017	= "/cmsuf/data/store/user/t2/users/nikmenendez/2017_MC_bkg/"
+bkgTreeDirT2_2018   = "/cmsuf/data/store/user/t2/users/nikmenendez/2018_MC_bkg/"  
+bkgTreeDirT2_test	= "/cmsuf/data/store/user/t2/users/klo/Higgs/DarkZ/NTuples/ZPlusX_Early2017_v1/"
+sigTreeDirT2        = "/cmsuf/data/store/user/t2/users/kshi/files_ihepa/Zprime/Zp_data_Ntuple/"
+datTreeDirT2_2018	= "/cmsuf/data/store/user/t2/users/klo/Higgs/HZZ4l/NTuple/Run2/Data2018_102X_M19_3l_2018jets/"
+datTreeDirT2_2017	= "/cmsuf/data/store/user/t2/users/klo/Higgs/DarkZ/NTuples/ZPlusX_Early2017_v1/"
 inputTreeName           = "Ana/passedEvents"
 
-outputDir 		= t2_prefix+"/store/user/t2/users/nikmenendez/skimmed/2017/new3/"
+#outputDir 		= t2_prefix+"/store/user/t2/users/nikmenendez/skimmed/2017/"
 #outputDir		= t2_prefix+"/store/user/t2/users/nikmenendez/skimmed/signal/new3/"
-#outputDir 		= t2_prefix+"/store/user/t2/users/nikmenendez/skimmed/test/"
+outputDir 		= t2_prefix+"/store/user/t2/users/nikmenendez/skimmed/test/new_dimu/"
 #outputDir		= t2_prefix+"/store/user/t2/users/nikmenendez/skimmed/data2017/"
 
 fileNames = [
@@ -33,10 +33,10 @@ fileNames = [
         #bkgTreeDirT2_2016+"DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root",
 		#bkgTreeDirT2_2016+"TTJets_Dilept_TuneCUETP8M2T4_13TeV-amcatnloFXFX-pythia8.root",
 		#bkgTreeDirT2_2016+"WZTo3LNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root",
-        bkgTreeDirT2_2017+"DYJetsToLL_M-10to50_TuneCP5_13TeV-madgraphMLM-pythia8.root",
-        bkgTreeDirT2_2017+"DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8.root",
-        bkgTreeDirT2_2017+"TTJets_DiLept_TuneCP5_13TeV-madgraphMLM-pythia8.root",
-        bkgTreeDirT2_2017+"WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8.root",
+        #bkgTreeDirT2_2017+"DYJetsToLL_M-10to50_TuneCP5_13TeV-madgraphMLM-pythia8.root",
+        #bkgTreeDirT2_2017+"DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8.root",
+        #bkgTreeDirT2_2017+"TTJets_DiLept_TuneCP5_13TeV-madgraphMLM-pythia8.root",
+        #bkgTreeDirT2_2017+"WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8.root",
         #bkgTreeDirT2_2018+"DYJetsToLL_M-10to50_TuneCP5_13TeV-madgraphMLM-pythia8.root",
         #bkgTreeDirT2_2018+"DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8.root",
         #bkgTreeDirT2_2018+"TTJets_DiLept_TuneCP5_13TeV-madgraphMLM-pythia8.root",
@@ -56,6 +56,10 @@ fileNames = [
 		#bkgTreeDirT2_test+'DYJetsToLL_M50.root',
 		#bkgTreeDirT2_test+'TTJets.root',
 		#bkgTreeDirT2_test+'WZTo3LNu.root',
+		
+		bkgTreeDirT2_2017+"WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8.root",
+		#bkgTreeDirT2_2017+"ZZTo4L_TuneCP5_13TeV-amcatnloFXFX-pythia8.root",
+
         ]
 
 # ____________________________________________________________________________________________________________________________________ ||
